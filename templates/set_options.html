@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cloud Printing Options</title>
+    <link rel="shortcut icon" href="../images/fav_icon.png" type="image/x-icon">
+    <!-- Bulma Version 0.9.0-->
+    <link rel="stylesheet" href="https://unpkg.com/bulma@0.9.0/css/bulma.min.css" />
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"
+        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+
+    <style>
+        tr td {
+            border: 0 !important;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- START NAV -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-brand">
+                <a class="navbar-item" href="../">
+                    <h3>Cloud Printer</h3>
+                </a>
+                <span class="navbar-burger burger" data-target="navbarMenu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+            </div>
+            <div id="navbarMenu" class="navbar-menu">
+                <div class="navbar-end">
+                    <a href="/dashboard" class="navbar-item is-active">Dashboard</a>
+                    <div class="navbar-item has-dropdown is-hoverable">
+                        <a class="navbar-link">Account</a>
+                        <div class="navbar-dropdown">
+                            <a class="navbar-item" href="profile.html">Profile</a>
+                            <a class="navbar-item">Settings</a>
+                            <hr class="navbar-divider">
+                            <div class="navbar-item"><a href="/logout">Logout</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- END NAV -->
+    <section class="hero is-fullheight">
+        <div class="hero-body">
+            <div class="container has-text-centered">
+                <div class="columns is-8 is-variable ">
+                    <div class="column is-half has-text-left">
+                        <iframe src="{{filePath}}" frameborder="0" width="100%" height="720px" id="myFrame"></iframe>
+                    </div>
+                    <div class="column is_half has-text-left">
+                        <div>
+                            <h3 class="title is-3 has-text-centered">
+                                Printing Details
+                            </h3>
+                            <table class="table is-fullwidth">
+                                <tbody>
+                                    <tr>
+                                        <td>Total Number of Pages</td>
+                                        <td><span id="t_pg">{{pageNumber}}</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Copies</td>
+                                        <td><span id="t_cp">1</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Price Per Page</td>
+                                        <td>{{unit_price}}</td>
+                                    </tr>
+
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>Total Cost</th>
+                                        <th><span id="t_cost">{{pageNumber * unit_price}}</span></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                            <hr>
+                        </div>
+
+                        <!-- Print option area --->
+
+                        <div class="field">
+                            <label class="label">Copies</label>
+                            <div class="control">
+                                <input class="input is-medium" id="copy" name="copy" type="number" min="1" value="1">
+                            </div>
+                            <p class="help is-danger is-hidden" id="warn_min">The lowest value is 1</p>
+                        </div>
+                        <div class="field">
+                            <label class="label">Pages To Print</label>
+                            <div class="select is-rounded is-fullwidth">
+                                <select name="pages" id="pages">
+                                    <option value="all">All</option>
+                                    <option value="odd">Odd Page</option>
+                                    <option value="even">Even Page</option>
+                                    <option value="custom">Custom</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="control">
+                                <input class="input is-medium" id="custom" type='hidden' name="custom"
+                                    placeholder="0,1-4,5" value="0">
+                            </div>
+                            <p class="help is-danger is-hidden" id="warn_cs"></p>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Payment Method</label>
+                            <div class="select is-rounded is-fullwidth">
+                                <select name="payment_method" id="payment_method">
+                                    <option value="bkash">Bkash</option>
+                                    <option value="nogod">Nogod</option>
+                                    <option value="rocket">Rocket</option>
+                                    <option value="upday">UPay</option>
+                                    <option value="dbbl">Dutch Bangla Bank</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">A/C No:</label>
+                            <div class="control">
+                                <input class="input is-medium" id="account" type='text' name="account"
+                                    placeholder="Account" required>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Transaction ID</label>
+                            <div class="control">
+                                <input class="input is-medium" id="tnx" type='text' name="tnx"
+                                    placeholder="Transaction ID" required>
+                            </div>
+                        </div>
+
+                        <div class="control">
+                            <button type="submit" id="checkout"
+                                class="button is-primary is-fullwidth has-text-weight-medium is-medium">Checkout</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</body>
+
+<script>
+    function calculateCost() {
+        err = false;
+        total_pg = {
+            {
+                pageNumber
+            }
+        }
+        pages = $("#pages").val();
+
+        if (total_pg === 1) {
+            total_page = 1
+        } else if (pages === 'custom') {
+            pages = $('#custom').val();
+            custom = pages.split(',');
+            total_page = 0
+            for (let idx in custom) {
+                page = custom[idx];
+                if (page.includes('-') === true) {
+                    range = page.split("-");
+                    pg = parseInt(range[1]) - parseInt(range[0]) + 1;
+                    if (parseInt(range[1]) > total_pg || parseInt(range[0]) > total_pg) {
+                        err = true;
+                        $('#warn_cs').text("Page number should not exceed max page number " + total_pg)
+                    } else if (pg <= 0) {
+                        $('#warn_cs').text("Page number difference should be ascending in order");
+                        err = true
+                    }
+                    total_page += pg;
+                } else {
+                    if (parseInt(custom[idx]) > total_pg) {
+                        err = true
+                        $('#warn_cs').text('Page number should not exceed max page number ' + total_pg)
+                    }
+                    total_page += 1;
+                }
+            }
+        } else if (pages === 'odd') {
+            if (total_pg % 2 === 1) {
+                total_page = total_pg / 2 + 1;
+            } else {
+                total_page = total_pg / 2;
+            }
+
+        } else if (pages === 'even') {
+            total_page = total_pg / 2;
+
+        } else {
+            total_page = total_pg
+        }
+        console.log("Funtion Triggered...")
+        total_copy = parseInt($('#copy').val());
+
+        if (err === true) {
+            total_page = 0
+            $('#warn_cs').removeClass('is-hidden');
+            $('#custom').addClass('is-danger');
+        } else {
+            $('#warn_cs').addClass('is-hidden');
+            $('#custom').removeClass('is-danger');
+        }
+        total_cost = total_page * total_copy * {
+            {
+                unit_price
+            }
+        }
+
+
+        $('#t_pg').text(total_page);
+        $('#t_cp').text(total_copy);
+        $('#t_cost').text(total_cost);
+        return {
+            "total_copies": total_copy,
+            "total_cost": total_cost,
+            "pages": pages,
+            "payment_verification_status": 'verified',
+            "print_progress_status": "in queue",
+            "payment_transaction_id": $('#tnx').val(),
+            'payment_method': $('#payment_method').val(),
+            'account': $('#account').val()
+
+        }
+    }
+</script>
+
+<script>
+    $('#copy').on('change', function () {
+        total_copy = $('#copy').val()
+        if (total_copy < 1) {
+            $('#warn_min').removeClass('is-hidden');
+            $('#copy').addClass('is-danger');
+        } else {
+            $('#warn_min').addClass('is-hidden');
+            $('#copy').removeClass('is-danger');
+        }
+
+        calculateCost();
+    });
+
+
+    $('#custom').on('change', function () {
+        calculateCost();
+    });
+
+    $('select').on('change', function () {
+
+        if ($('#pages').val() == 'custom') {
+            $('#custom')[0].type = 'text';
+        } else {
+            $('#custom')[0].type = 'hidden'
+        }
+        calculateCost();
+    })
+
+    /*
+     * Ajax Post Area
+     * */
+    $('#checkout').on('click', function () {
+        formData = calculateCost(); //data to send
+        console.log(formData);
+        $.ajax({
+            url: "/accept_print_info/{{ record_id }}", // Url of backend
+            type: "POST", // data type (can be get, post, put, delete)
+            data: formData, // data in json format
+            async: false, // enable or disable async (optional, but suggested as false if you need to populate data afterwards)
+            success: function (response, textStatus, jqXHR) {
+                console.log(response);
+                window.location.href = '/dashboard';
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR);
+                console.log(textStatus);
+                console.log(errorThrown);
+            }
+        });
+
+    });
+</script>
+
+</html>

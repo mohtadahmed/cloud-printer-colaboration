@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard</title>
+  <link rel="shortcut icon" href="../images/fav_icon.png" type="image/x-icon">
+  <!-- Bulma Version 0.9.0-->
+  <link rel="stylesheet" href="https://unpkg.com/bulma@0.9.0/css/bulma.min.css" />
+  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+    integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"
+    integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css">
+  <style>
+    tr td {
+      border: 0 !important;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- START NAV -->
+  <nav class="navbar">
+    <div class="container">
+      <div class="navbar-brand">
+        <a class="navbar-item" href="../">
+          <h3><a href="/dashboard">Cloud Printer</a></h3>
+        </a>
+        <span class="navbar-burger burger" data-target="navbarMenu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+      </div>
+      <div id="navbarMenu" class="navbar-menu">
+        <div class="navbar-end">
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link">Account</a>
+            <div class="navbar-dropdown">
+              <a class="navbar-item" href="/profile">Profile</a>
+              <a class="navbar-item">Settings</a>
+              <hr class="navbar-divider">
+              <div class="navbar-item"><a href="/logout">Logout</a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <!-- END NAV -->
+  <section class="hero is-fullheight">
+    <div class="hero-body">
+      <div class="container">
+        <div class="columns">
+          <div class="column is-three-fifths is-offset-one-fifth">
+            <form method="POST" action="/uploader" enctype="multipart/form-data">
+              <div class="file is-large has-name is-fullwidth">
+                <label class="file-label">
+                  <input class="file-input" type="file" name="file" required>
+                  <span class="file-cta">
+                    <span class="file-icon">
+                      <i class="fas fa-upload"></i>
+                    </span>
+                    <span class="file-label">
+                      Upload…
+                    </span>
+                  </span>
+                  <span class="file-name">
+                    Upload a document to print
+                  </span>
+                </label>
+              </div>
+              <br>
+              <div class="field">
+                <p class="control">
+                  <button class="button is-success">
+                    Upload File
+                  </button>
+                </p>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="columns">
+          <!-- Table -->
+          {% if data %}
+          <hr>
+          <div class="column is-three-fifths is-offset-one-fifth">
+            <table class="table is-fullwidth">
+              <thead>
+                <tr>
+                  <th>Previous Print Requests</th>
+                  <th>Payment Status</th>
+                  <th>Print Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for file in data %}
+                <tr>
+                  <td><a href="{{ file['src'] }}">{{ file['file_name'] }}</a> </td>
+                  <td>{{ file['payment_status'] }}</td>
+                  <td>{{ file['print_status'] }}</td>
+                  <td><a class="button is-small" href="/set_options/{{ file['id'] }}">Edit</a>
+                    <a class="button is-small is-danger" href="/delete_print_request/{{ file['id'] }}">DELETE</a></td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </section>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Display file name when select file
+      let fileInputs = document.querySelectorAll('.file.has-name')
+      for (let fileInput of fileInputs) {
+        let input = fileInput.querySelector('.file-input')
+        let name = fileInput.querySelector('.file-name')
+        input.addEventListener('change', () => {
+          let files = input.files
+          if (files.length === 0) {
+            name.innerText = 'No file selected'
+          } else {
+            name.innerText = files[0].name
+          }
+        })
+      }
+
+      // 2. Remove file name when form reset
+      let forms = document.getElementsByTagName('form')
+      for (let form of forms) {
+        form.addEventListener('reset', () => {
+          console.log('a')
+          let names = form.querySelectorAll('.file-name')
+          for (let name of names) {
+            name.innerText = 'No file selected'
+          }
+        })
+      }
+    })
+  </script>
+</body>
+
+</html>
